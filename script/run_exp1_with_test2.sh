@@ -1,7 +1,7 @@
 #!/bin/bash
 
 TASKS=("character") # "("character" "plot")
-MODELS=("llama-7b" "qwen-8b") # ("gpt-5.1" "gpt-5.2" "exaone-7b" "exaone-32b" "llama-7b" "llama-70b" "qwen-8b" "qwen-32b" "gpt-oss-20b")
+MODELS=("gpt-oss-20b") # ("gpt-5.1" "gpt-5.2" "exaone-7b" "exaone-32b" "llama-7b" "llama-70b" "qwen-8b" "qwen-32b" "gpt-oss-20b")
 DATA_SEEDS=(42) #
 MODEL_SEEDS=(44) #(42 43)
 
@@ -41,7 +41,7 @@ for task in "${TASKS[@]}"; do
                     --model_seed "$m_seed" \
                     --sampling_count "$SAMPLING_COUNT" \
                     --temperature "$TEMPERATURE" \
-                    --max_token 64 \
+                    --max_token 128 \
                     --run_type full
 
 

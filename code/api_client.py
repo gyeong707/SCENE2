@@ -180,16 +180,12 @@ class TransformersHandler(BaseHandler):
                     template_kwargs["reasoning_effort"] = 'low'
 
                 text_input = self.tokenizer.apply_chat_template(messages, **template_kwargs)
-
+                # print(text_input)
             
             except Exception as e:
                 print(f"Chat template warning: {e}. Using raw concatenation.")
                 text_input = f"{system_content}\n\n{prompt}"
 
-            # if self.is_gpt_oss:
-            #     text_input = f"{system_content}\n\n{prompt}"
-
-            # print(text_input)
             # Tokenizing
             inputs = self.tokenizer(text_input, return_tensors="pt").to(self.model.device)
 
@@ -199,8 +195,8 @@ class TransformersHandler(BaseHandler):
                 "max_new_tokens": max_token,
                 "do_sample": do_sample,
                 "pad_token_id": self.tokenizer.pad_token_id,
-                "eos_token_id": self.tokenizer.eos_token_id 
-            }
+                "eos_token_id": self.tokenizer.eos_token_id
+                }
             if do_sample:
                 gen_kwargs["temperature"] = temperature
                 gen_kwargs["top_p"] = 0.9
@@ -216,13 +212,80 @@ class TransformersHandler(BaseHandler):
             input_len = inputs.input_ids.shape[1]
             generated_ids = outputs[0][input_len:]
             decoded = self.tokenizer.decode(generated_ids, skip_special_tokens=True).strip()
-            
+
+            if getattr(self, 'is_gpt_oss', False):
+                current_max_token = max_token
+                
+                if 'assistantfinal' in decoded and 'A' in decoded and 'B' in decoded: 
+                    is_finished = True
+                else: is_finished = False
+
+                while not is_finished:
+                    # 상한선 체크 (1024)
+                    if current_max_token >= 1024:
+                        print(">>> GPT-OSS: Reached 1024 tokens limit. Giving up.")
+                        break
+                    
+                    # 토큰 2배 증가
+                    current_max_token *= 2
+                    if current_max_token > 1024: 
+                        current_max_token = 1024
+                    
+                    print(f">>> GPT-OSS: Output truncated. Retrying with {current_max_token} tokens...")
+                    
+                    # 설정 업데이트 및 재생성
+                    gen_kwargs["max_new_tokens"] = current_max_token
+                    
+                    with torch.no_grad():
+                        outputs = self.model.generate(**inputs, **gen_kwargs)
+                    
+                    # 결과 확인
+                    generated_ids = outputs[0][input_len:]
+                    decoded = self.tokenizer.decode(generated_ids, skip_special_tokens=True).strip()
+                    
+                    if 'assistantfinal' in decoded and 'A' in decoded and 'B' in decoded: 
+                        is_finished = True
+                        break
+
+            elif getattr(self, 'is_exaone', False):
+                # 시도할 온도 리스트
+                retry_temps = [0.0, 0.2, 0.4, 0.6, 0.8]
+                
+                print(f">>> Exaone: Output incomplete/looped. Starting Temperature Scaling Strategy...")
+                suffix_prompt = "</thought>"
+                
+                retry_text = text_input + suffix_prompt
+                retry_inputs = self.tokenizer(retry_text, return_tensors="pt").to(self.model.device)
+                retry_input_len = retry_inputs.input_ids.shape[1]
+
+                print(f">>> Exaone: Loop suspected. Retrying with instruction reinforcement...")
+
+                for i, temp_val in enumerate(retry_temps):
+                    print(f">>> Exaone: Retry {i+1}/5 with Temperature={temp_val}, Penalty=1.1  ...")
+                    if temp_val >= 0.1:
+                        gen_kwargs["do_sample"] = True
+                        gen_kwargs["temperature"] = temp_val 
+                        gen_kwargs["top_p"] = 0.9
+                        gen_kwargs["repetition_penalty"] = 1.1
+
+                    with torch.no_grad():
+                        outputs = self.model.generate(**retry_inputs, **gen_kwargs)
+                    
+                    decoded = self.tokenizer.decode(outputs[0][retry_input_len:], skip_special_tokens=True).strip()
+
+                    if "A: [" in decoded or "A: " in decoded or "</thought>" in decoded:
+                        is_finished = True
+                        print(f">>> Exaone: Success at Temperature={temp_val}")
+                        break
+                
+                if not is_finished:
+                     print(">>> Exaone: Failed all temperature retries.")
+
             return decoded
 
         except Exception as e:
             print(f"Local Inference Error: {e}")
             return "Error"
-
 
 
 def get_model_handler(model_name):

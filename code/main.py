@@ -205,7 +205,7 @@ def main():
                 max_token=args.max_token,
                 seed=args.model_seed
             )
-            # print("Raw response: ", raw_response)
+            print("Raw response: ", raw_response)
             result_row = row.to_dict()
             if prompt_metadata:
                 result_row.update(prompt_metadata)
