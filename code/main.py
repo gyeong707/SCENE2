@@ -203,7 +203,8 @@ def main():
                 system_content=system_prompt,
                 temperature=args.temperature,
                 max_token=args.max_token,
-                seed=args.model_seed
+                seed=args.model_seed,
+                task_type=args.task_type
             )
             print("Raw response: ", raw_response)
             result_row = row.to_dict()

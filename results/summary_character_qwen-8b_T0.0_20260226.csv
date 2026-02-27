@@ -1,0 +1,2 @@
+﻿timestamp,task_type,model_name,dataset_seed,model_seed,temperature,sampling_count,input_file,total_samples,biased_count,neutral_count,counter_count,error_count,biased_ratio,neutral_ratio,counter_ratio,error_ratio
+2026-02-26 20:55:21,character,qwen-8b,42,42,0.0,10,character_specification_s3_augmented_250225_updated.csv,7520,4744,672,2011,93,63.09,8.94,26.74,1.24

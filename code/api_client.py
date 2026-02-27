@@ -157,7 +157,7 @@ class TransformersHandler(BaseHandler):
             print(f":: Model Load Failed: {e}")
             raise e
 
-    def generate(self, prompt, system_content="You are a helpful assistant.", temperature=0.0, max_token=768, seed=None):
+    def generate(self, prompt, system_content="You are a helpful assistant.", temperature=0.0, max_token=512, seed=None, task_type=None):
         try:
             # Message construction
             messages = [
@@ -247,8 +247,8 @@ class TransformersHandler(BaseHandler):
                         is_finished = True
                         break
 
-            elif getattr(self, 'is_exaone', False) :
-                # 시도할 온도 리스트
+            elif getattr(self, 'is_exaone', False) and task_type == 'character':
+                # Character 태스크 전용: A/B 형식 incomplete/loop 대응 retry
                 retry_temps = [0.0, 0.2, 0.4, 0.6, 0.8]
                 
                 print(f">>> Exaone: Output incomplete/looped. Starting Temperature Scaling Strategy...")
