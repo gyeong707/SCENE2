@@ -157,7 +157,7 @@ class TransformersHandler(BaseHandler):
             print(f":: Model Load Failed: {e}")
             raise e
 
-    def generate(self, prompt, system_content="You are a helpful assistant.", temperature=0.0, max_token=512, seed=None):
+    def generate(self, prompt, system_content="You are a helpful assistant.", temperature=0.0, max_token=768, seed=None):
         try:
             # Message construction
             messages = [
@@ -247,7 +247,7 @@ class TransformersHandler(BaseHandler):
                         is_finished = True
                         break
 
-            elif getattr(self, 'is_exaone', False):
+            elif getattr(self, 'is_exaone', False) :
                 # 시도할 온도 리스트
                 retry_temps = [0.0, 0.2, 0.4, 0.6, 0.8]
                 

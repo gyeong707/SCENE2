@@ -1,9 +1,9 @@
 #!/bin/bash
 
-TASKS=("character") # "("character" "plot")
+TASKS=("plot") # "("character" "plot")
 MODELS=("exaone-7b") # ("gpt-5.1" "gpt-5.2" "exaone-7b" "exaone-32b" "llama-7b" "llama-70b" "qwen-8b" "qwen-32b" "gpt-oss-20b")
 DATA_SEEDS=(42) #
-MODEL_SEEDS=(44) #(42 43)
+MODEL_SEEDS=(42) #(42 43)
 
 INPUT_DIR="./data"
 OUTPUT_DIR="./results"
@@ -13,9 +13,9 @@ TEMPERATURE=0.0
 for task in "${TASKS[@]}"; do
     
     if [ "$task" == "character" ]; then
-        INPUT_FILE="character_s3_full_final_len_67566.csv"
+        INPUT_FILE="character_specification_s3_augmented_250225_updated.csv"
     elif [ "$task" == "plot" ]; then
-        INPUT_FILE="plot_s3_full_final_len_67676.csv"
+        INPUT_FILE="plot_development_s3_augmented_250225.csv"
     else
         echo "Unknown task: $task"
         continue

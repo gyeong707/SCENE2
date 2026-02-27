@@ -13,7 +13,7 @@ TEMPERATURE=0.0
 for task in "${TASKS[@]}"; do
     
     if [ "$task" == "character" ]; then
-        INPUT_FILE="character_s3_full_final_len_67566.csv"
+        INPUT_FILE="character_specification_s3_augmented_250225_updated.csv"
     elif [ "$task" == "plot" ]; then
         INPUT_FILE="plot_s3_full_final_len_67676.csv"
     else
