@@ -22,6 +22,8 @@ def save_experiment_summary(args, stats, summary_path):
     summary_data = {
         "timestamp": pd.Timestamp.now().strftime('%Y-%m-%d %H:%M:%S'),
         "task_type": args.task_type,
+        "exp_type": args.exp_type,
+        "system_role": args.system_role,
         "model_name": args.model_name,
         "dataset_seed": args.dataset_seed,
         "model_seed": args.model_seed,
@@ -57,9 +59,14 @@ def main():
     parser.add_argument('--model_seed', type=int, default=42, help='model seed')
     parser.add_argument('--sampling_count', type=int, default=10, help='the number of data per template')
     
-    # 3. 태스크 타입
+    # 3. 태스크 타입 및 실험 설정
     parser.add_argument('--task_type', type=str, required=True, choices=['plot', 'character'], help='task type')
-    parser.add_argument('--use_role', type=bool, default=False, help='Use task-specific persona')
+    parser.add_argument('--exp_type', type=str, default='default',
+                        choices=['default', 'role', 'linguistic', 'kobbq', 'task'],
+                        help='experiment type: default, role, linguistic, kobbq, task')
+    parser.add_argument('--system_role', type=str, default='no_prompt',
+                        choices=['no_prompt', 'helpful', 'creative', 'humorous'],
+                        help='system prompt role (default: no_prompt)')
     parser.add_argument('--run_type', type=str, default='test', required=False, choices=['full', 'test'])
     parser.add_argument('--inference_type', type=str, default='real-time', required=False, choices=['batch', 'real-time'])
     parser.add_argument('--max_token', type=int, default=512, required=False)
@@ -86,7 +93,7 @@ def main():
         if not os.path.exists(args.output_path): os.makedirs(args.output_path)
         base_name = os.path.splitext(args.input_file)[0]
         
-        jsonl_path = os.path.join(args.output_path, f"{base_name}_{args.task_type}_batch_request.jsonl")
+        jsonl_path = os.path.join(args.output_path, f"{base_name}_{args.task_type}_{args.exp_type}_{args.system_role}_batch_request.jsonl")
         
         batch_lines = []
         metadata_dict = {}
@@ -96,8 +103,7 @@ def main():
             prompt_text, metadata = prompts.construct_prompt(args.task_type, row, seed=args.dataset_seed)
             custom_id = f"req_{index}"
             
-            use_role = getattr(args, 'use_role', False) 
-            system_prompt = prompts.get_system_prompt(args.task_type, use_role=use_role)
+            system_prompt = prompts.get_system_prompt(args.task_type, system_role=args.system_role)
             
             line = model_handler.prepare_batch_line(
                 custom_id=custom_id,
@@ -189,9 +195,8 @@ def main():
     # Real-time 실행 
     # ------------------------------------------------------------------
     else:
-        print(f":: Real-time Inferencing (Model: {args.model_name}) ::")
-        use_role = getattr(args, 'use_role', False) 
-        system_prompt = prompts.get_system_prompt(args.task_type, use_role=use_role)
+        print(f":: Real-time Inferencing (Model: {args.model_name}, exp_type: {args.exp_type}, system_role: {args.system_role}) ::")
+        system_prompt = prompts.get_system_prompt(args.task_type, exp_type=args.exp_type)
         
         results = []
 
@@ -221,10 +226,12 @@ def main():
     raw_folder = os.path.join(args.output_path, "raw")
     os.makedirs(raw_folder, exist_ok=True)
 
-    raw_save_name = f"{args.task_type}_{args.model_name}_d{args.dataset_seed}_m{args.model_seed}_raw.csv"
+    raw_save_name = f"{args.task_type}_{args.exp_type}_{args.system_role}_{args.model_name}_d{args.dataset_seed}_m{args.model_seed}_raw.csv"
     raw_save_path = os.path.join(raw_folder, raw_save_name)
 
     result_df = pd.DataFrame(results)
+    result_df['exp_type'] = args.exp_type
+    result_df['system_role'] = args.system_role
 
     if 'custom_id' in result_df.columns:
         result_df['sort_idx'] = result_df['custom_id'].apply(lambda x: int(x.split('_')[1]))
@@ -270,7 +277,7 @@ def main():
         save_name = args.output_file
     else:
         clean_model_name = args.model_name.replace("/", "_").replace("\\", "_")
-        save_name = f"result_{args.task_type}_{clean_model_name}_d{args.dataset_seed}_m{args.model_seed}.csv"
+        save_name = f"result_{args.task_type}_{args.exp_type}_{args.system_role}_{clean_model_name}_d{args.dataset_seed}_m{args.model_seed}.csv"
     
     save_path = os.path.join(eval_folder, save_name)
     evaluated_df.to_csv(save_path, index=False, encoding='utf-8-sig')
@@ -278,7 +285,7 @@ def main():
 
     # summary 저장
     current_date = datetime.now().strftime("%Y%m%d")
-    summary_filename = f"summary_{args.task_type}_{args.model_name}_T{args.temperature}_{current_date}.csv"
+    summary_filename = f"summary_{args.task_type}_{args.exp_type}_{args.system_role}_{args.model_name}_T{args.temperature}_{current_date}.csv"
     summary_file_path = os.path.join(args.output_path, summary_filename)
     save_experiment_summary(args, stats, summary_path=summary_file_path)
     return 

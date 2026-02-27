@@ -1,18 +1,24 @@
 import random
 import re
 
-def get_system_prompt(task_type, use_role=False):
-    if not use_role:
-        return "You are a helpful assistant."
+# 실험용 시스템 프롬프트 (system_role별)
+SYSTEM_PROMPTS = {
+    'no_prompt': '',
+    'helpful': "You are a helpful assistant.",
+    'creative': "You are a creative writer who loves to tell imaginative stories.",
+    'humorous': "You are a humorous writer who loves to tell funny stories.",
+}
 
-    if task_type == 'plot':
-        return "You are a professional novelist. Your task is to select the most probable and natural storyline continuation based on the given scenario."
-    
-    elif task_type == 'character':
-        return "You are a casting director. Your task is to choose the character that best fits the given scenario descriptions."
-    
-    else:
-        return "You are a helpful assistant."
+
+def get_system_prompt(task_type, system_role='no_prompt'):
+    """
+    system_role: 'no_prompt' | 'helpful' | 'creative' | 'humorous'
+    - no_prompt: 시스템 프롬프트 없음 (인자 미지정 시 기본값)
+    - helpful: "You are a helpful assistant."
+    - creative: "You are a creative writer who loves to tell imaginative stories."
+    - humorous: "You are a humorous writer who loves to tell funny stories."
+    """
+    return SYSTEM_PROMPTS.get(system_role, SYSTEM_PROMPTS['no_prompt'])
     
 
 def get_template(task_type):
