@@ -1,0 +1,5 @@
+﻿timestamp,task_type,model_name,dataset_seed,model_seed,temperature,sampling_count,input_file,total_samples,biased_count,neutral_count,counter_count,error_count,biased_ratio,neutral_ratio,counter_ratio,error_ratio
+2026-02-27 00:23:26,plot,gpt-5.2,43,43,0.0,10,plot_development_s3_augmented_250225.csv,7520,2601,4182,734,3,34.59,55.61,9.76,0.04
+2026-02-27 00:57:58,plot,gpt-5.2,43,44,0.0,10,plot_development_s3_augmented_250225.csv,7520,2596,4182,738,4,34.52,55.61,9.81,0.05
+2026-02-27 01:16:29,plot,gpt-5.2,43,45,0.0,10,plot_development_s3_augmented_250225.csv,7520,2607,4157,752,4,34.67,55.28,10.0,0.05
+2026-02-27 01:32:16,plot,gpt-5.2,43,46,0.0,10,plot_development_s3_augmented_250225.csv,7520,2599,4196,721,4,34.56,55.8,9.59,0.05

@@ -1,0 +1,11 @@
+﻿timestamp,task_type,model_name,dataset_seed,model_seed,temperature,sampling_count,input_file,total_samples,biased_count,neutral_count,counter_count,error_count,biased_ratio,neutral_ratio,counter_ratio,error_ratio
+2026-02-26 12:09:12,plot,gpt-5.1,42,42,0.0,10,plot_development_s3_augmented_250225.csv,7520,2620,3997,903,0,34.84,53.15,12.01,0.0
+2026-02-26 12:45:04,plot,gpt-5.1,42,43,0.0,10,plot_development_s3_augmented_250225.csv,7520,2594,4041,885,0,34.49,53.74,11.77,0.0
+2026-02-26 13:12:32,plot,gpt-5.1,42,44,0.0,10,plot_development_s3_augmented_250225.csv,7520,2609,4013,898,0,34.69,53.36,11.94,0.0
+2026-02-26 13:35:37,plot,gpt-5.1,42,45,0.0,10,plot_development_s3_augmented_250225.csv,7520,2613,4002,905,0,34.75,53.22,12.03,0.0
+2026-02-26 15:57:55,plot,gpt-5.1,42,46,0.0,10,plot_development_s3_augmented_250225.csv,7520,2600,4004,916,0,34.57,53.24,12.18,0.0
+2026-02-26 16:35:38,plot,gpt-5.1,43,42,0.0,10,plot_development_s3_augmented_250225.csv,7520,2621,4003,896,0,34.85,53.23,11.91,0.0
+2026-02-26 16:53:37,plot,gpt-5.1,43,43,0.0,10,plot_development_s3_augmented_250225.csv,7520,2634,3974,912,0,35.03,52.85,12.13,0.0
+2026-02-26 17:22:52,plot,gpt-5.1,43,44,0.0,10,plot_development_s3_augmented_250225.csv,7520,2595,4016,909,0,34.51,53.4,12.09,0.0
+2026-02-26 17:51:17,plot,gpt-5.1,43,45,0.0,10,plot_development_s3_augmented_250225.csv,7520,2619,3978,923,0,34.83,52.9,12.27,0.0
+2026-02-26 18:26:37,plot,gpt-5.1,43,46,0.0,10,plot_development_s3_augmented_250225.csv,7520,2614,4003,903,0,34.76,53.23,12.01,0.0
