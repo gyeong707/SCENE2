@@ -1,0 +1,2 @@
+﻿timestamp,task_type,exp_type,system_role,model_name,dataset_seed,model_seed,temperature,sampling_count,input_file,total_samples,biased_count,neutral_count,counter_count,error_count,biased_ratio,neutral_ratio,counter_ratio,error_ratio
+2026-02-27 04:40:36,character,default,no_prompt,gpt-5.1,42,42,0.0,10,character_specification_s3_augmented_250225_updated.csv,7520,5165,819,1484,52,68.68,10.89,19.73,0.69

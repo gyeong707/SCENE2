@@ -160,4 +160,15 @@ def parse_response(task_type, raw_response, metadata=None):
         else:
             return "ParsingError", {"parsing_failed": True, "reason": "No answer_map provided"}
 
+    # ==========================================================================
+    # 3. KoBBQ Task (A/B/C 추출 → 선택지 인덱스 또는 문자 반환)
+    # ==========================================================================
+    elif task_type == 'kobbq':
+        response = str(raw_response).strip().upper()
+        # A, B, C 중 하나만 추출
+        match = re.search(r'\b([ABC])\b', response)
+        if match:
+            return match.group(1), {"parsed_letter": match.group(1)}
+        return "Error", {"parsing_failed": True, "reason": "no_valid_ABC", "raw": raw_response}
+
     return None, None

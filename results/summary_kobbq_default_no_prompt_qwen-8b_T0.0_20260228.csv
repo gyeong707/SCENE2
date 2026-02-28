@@ -1,0 +1,2 @@
+﻿timestamp,task_type,exp_type,system_role,model_name,dataset_seed,model_seed,temperature,sampling_count,input_file,total_samples,biased_count,neutral_count,counter_count,error_count,biased_ratio,neutral_ratio,counter_ratio,error_ratio
+2026-02-28 04:20:26,kobbq,default,no_prompt,qwen-8b,42,42,0.0,1,KoBBQ_all_samples_with_add_cols_only_amb_version_ab.csv,538,108,372,58,0,20.07,69.14,10.78,0.0

@@ -60,7 +60,7 @@ def main():
     parser.add_argument('--sampling_count', type=int, default=10, help='the number of data per template')
     
     # 3. 태스크 타입 및 실험 설정
-    parser.add_argument('--task_type', type=str, required=True, choices=['plot', 'character'], help='task type')
+    parser.add_argument('--task_type', type=str, required=True, choices=['plot', 'character', 'kobbq'], help='task type')
     parser.add_argument('--exp_type', type=str, default='default',
                         choices=['default', 'role', 'linguistic', 'kobbq', 'task'],
                         help='experiment type: default, role, linguistic, kobbq, task')
@@ -79,7 +79,8 @@ def main():
         file_path=full_input_path,
         count=args.sampling_count,
         seed=args.dataset_seed,
-        run_type=args.run_type
+        run_type=args.run_type,
+        task_type=args.task_type
     )
     print("데이터 로드 완료: ", len(df))
     model_handler = api_client.get_model_handler(args.model_name)
@@ -196,7 +197,7 @@ def main():
     # ------------------------------------------------------------------
     else:
         print(f":: Real-time Inferencing (Model: {args.model_name}, exp_type: {args.exp_type}, system_role: {args.system_role}) ::")
-        system_prompt = prompts.get_system_prompt(args.task_type, exp_type=args.exp_type)
+        system_prompt = prompts.get_system_prompt(args.task_type, system_role=args.system_role)
         
         results = []
 

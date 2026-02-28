@@ -1,2 +1,0 @@
-﻿timestamp,task_type,model_name,dataset_seed,model_seed,temperature,sampling_count,input_file,total_samples,biased_count,neutral_count,counter_count,error_count,biased_ratio,neutral_ratio,counter_ratio,error_ratio
-2026-02-26 05:33:40,character,exaone-7b,42,44,0.0,10,character_specification_s3_augmented_250225_updated.csv,7520,3774,1012,2379,355,50.19,13.46,31.64,4.72
