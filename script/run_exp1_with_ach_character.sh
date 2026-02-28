@@ -2,8 +2,8 @@
 
 TASKS=("character") # "("character" "plot")
 MODELS=("exaone-32b" "llama-70b" "qwen-32b") # ("gpt-5.1" "gpt-5.2" "exaone-7b" "exaone-32b" "llama-7b" "llama-70b" "qwen-8b" "qwen-32b" "gpt-oss-20b")
-DATA_SEEDS=(42) #
-MODEL_SEEDS=(42) #(42 43)
+DATA_SEEDS=(42 43 44 45 46) #
+MODEL_SEEDS=(42 43) #(42 43)
 
 INPUT_DIR="./data"
 OUTPUT_DIR="./results"
@@ -43,8 +43,6 @@ for task in "${TASKS[@]}"; do
                     --temperature "$TEMPERATURE" \
                     --max_token 64 \
                     --run_type full
-
-
 
                 if [ $? -ne 0 ]; then
                     echo "Error occurred during execution."
